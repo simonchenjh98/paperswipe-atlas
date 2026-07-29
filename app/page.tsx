@@ -67,7 +67,7 @@ export default function Home() {
   return <div className="app-shell">
     <aside className="sidebar">
       <button className="brand" onClick={() => setTab("discover")}><span>🎉</span><b>PaperSwipe</b></button>
-      <nav>{tabs.map(([id, icon, label]) => <button key={id} className={tab === id ? "active" : ""} onClick={() => setTab(id)}><i>{icon}</i><span>{label}</span></button>)}</nav>
+      <nav>{tabs.map(([id, icon, label]) => <button key={id} className={tab === id ? "active" : ""} onClick={() => setTab(id)}><i>{icon}</i><span>{label}</span></button>)}<a href="/about" style={{height:48,borderRadius:13,color:"#77756f",display:"flex",alignItems:"center",gap:14,padding:"0 15px",textDecoration:"none",fontSize:13,fontWeight:700}}><i style={{fontStyle:"normal",fontSize:20,width:24,textAlign:"center"}}>◈</i><span>产品介绍</span></a></nav>
       <div className="side-foot"><div className="avatar">JC</div><div><b>Researcher</b><small>同步于本机</small></div><button aria-label="设置">•••</button></div>
     </aside>
 

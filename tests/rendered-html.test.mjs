@@ -41,3 +41,26 @@ test("includes complete discovery workflow and live data route", async () => {
   assert.match(layout, /PaperSwipe/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 });
+
+test("renders the complete PaperSwipe product landing page", async () => {
+  const response = await render("/about");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /别再.*论文了/);
+  assert.match(html, /Explore/);
+  assert.match(html, /Library/);
+  assert.match(html, /Schedule/);
+  assert.match(html, /Trending/);
+  assert.match(html, /Discover/);
+  assert.match(html, /开始刷论文/);
+});
+
+test("ships a bespoke social preview", async () => {
+  const [layout, og] = await Promise.all([
+    readFile(new URL("app/layout.tsx", root), "utf8"),
+    readFile(new URL("public/og.png", root)),
+  ]);
+  assert.match(layout, /openGraph/);
+  assert.match(layout, /summary_large_image/);
+  assert.ok(og.length > 100_000);
+});
