@@ -18,28 +18,33 @@ test("renders the PaperSwipe product shell", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /PaperSwipe/);
-  assert.match(html, /今天，发现点/);
-  assert.match(html, /论文库/);
-  assert.match(html, /阅读计划/);
-  assert.match(html, /Atlas/);
+  assert.match(html, /Your edge/);
+  assert.match(html, /Library/);
+  assert.match(html, /Signal map/);
+  assert.match(html, /seven signals/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview/);
 });
 
 test("includes complete discovery workflow and live data route", async () => {
-  const [page, route, openAlex, layout, packageJson] = await Promise.all([
+  const [page, route, openAlex, relevance, layout, packageJson] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("app/api/papers/route.ts", root), "utf8"),
     readFile(new URL("lib/openalex.ts", root), "utf8"),
+    readFile(new URL("lib/relevance.ts", root), "utf8"),
     readFile(new URL("app/layout.tsx", root), "utf8"),
     readFile(new URL("package.json", root), "utf8"),
   ]);
   for (const state of ["saved", "priority", "read", "skipped"]) assert.match(page, new RegExp(state));
   assert.match(page, /downloadBibTeX/);
-  assert.match(page, /function Trending/);
+  assert.match(page, /function SignalMap/);
   assert.match(page, /localStorage\.setItem/);
   assert.match(route, /searchOpenAlex/);
   assert.match(openAlex, /api\.openalex\.org\/works/);
   assert.match(openAlex, /abstract_inverted_index/);
+  assert.match(relevance, /rankPapers/);
+  assert.match(relevance, /topic.*personal.*novelty.*evidence.*momentum.*builder/s);
+  assert.match(page, /SignalFingerprint/);
+  assert.match(page, /FrontierMap/);
   assert.match(layout, /PaperSwipe/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 });
@@ -48,13 +53,11 @@ test("renders the complete PaperSwipe product landing page", async () => {
   const response = await render("/about");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /别再.*论文了/);
-  assert.match(html, /Explore/);
-  assert.match(html, /Library/);
-  assert.match(html, /Schedule/);
-  assert.match(html, /Trending/);
-  assert.match(html, /Discover/);
-  assert.match(html, /开始刷论文/);
+  assert.match(html, /Know what matters/);
+  assert.match(html, /Relevance/);
+  assert.match(html, /daily frontier/i);
+  assert.match(html, /paperswipe pro/i);
+  assert.match(html, /\$5/);
 });
 
 test("ships a bespoke social preview", async () => {

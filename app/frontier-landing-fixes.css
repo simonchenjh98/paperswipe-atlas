@@ -1,0 +1,4 @@
+/* Keep decorative atmosphere out of the hero grid's document flow. */
+.launch-hero > .hero-noise {
+  position: absolute;
+}

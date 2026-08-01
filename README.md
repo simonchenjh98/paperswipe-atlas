@@ -1,14 +1,34 @@
-# PaperSwipe Atlas
+# PaperSwipe
 
-PaperSwipe Atlas is a swipe-first academic discovery experience. It combines
-live OpenAlex search, fast paper triage, a local research library, reading
-plans, trending papers, BibTeX export, and an exploratory knowledge atlas.
+PaperSwipe is the ten-minute daily research briefing for people building the
+future. It turns a broad academic index into a finite Daily Drop of high-signal
+papers, explains the builder angle, and learns from every save, skip, deep read,
+and share.
 
-## Live site
+## Live product
 
-The GitHub Pages deployment is published automatically from `main`:
+- Product: <https://simonchenjh98.github.io/paperswipe-atlas/>
+- Story and pricing: <https://simonchenjh98.github.io/paperswipe-atlas/about/>
 
-<https://simonchenjh98.github.io/paperswipe-atlas/>
+The current founder plan is designed around a simple $5/month subscription.
+Checkout is intentionally not connected until authentication, billing, and the
+production privacy policy are ready.
+
+## What is implemented
+
+- A finite seven-signal Daily Drop with swipe, keyboard, and button controls
+- Live OpenAlex discovery with a curated offline fallback
+- Multi-signal re-ranking across topic fit, personal affinity, novelty,
+  age-normalized evidence, momentum, and practical builder value
+- Transparent Signal Fingerprints and per-paper match explanations
+- Explicit negative feedback that updates the local interest profile
+- Saved-signal library and BibTeX export
+- Interest constellation and momentum-versus-maturity Frontier Map
+- Responsive product and conversion pages for desktop and mobile
+- A $5 Pro upgrade experience ready for a future secure checkout
+
+The ranking design and quality criteria are documented in
+[`docs/plans/2026-08-02-daily-frontier-design.md`](docs/plans/2026-08-02-daily-frontier-design.md).
 
 ## Local development
 
@@ -17,7 +37,7 @@ npm ci
 npm run dev
 ```
 
-Run the production checks with:
+Run the complete production checks with:
 
 ```bash
 npm run lint
@@ -25,14 +45,14 @@ npm test
 npm run build:pages
 ```
 
-## Deployment
+## Architecture and deployment
 
-- `.github/workflows/pages.yml` builds and deploys the static GitHub Pages
-  edition on every push to `main`.
-- The Pages edition calls OpenAlex directly from the browser, so it retains
-  live discovery without exposing any server secret.
-- The vinext application and `/api/papers` route remain available for a future
-  Cloudflare Workers or Node deployment.
+GitHub Actions deploys the static Pages edition after every push to `main`.
+The static build can call OpenAlex directly and falls back to a curated brief
+when the public API is unavailable.
 
-Never commit `.env` files or API keys. Add production credentials through the
-deployment platform's encrypted secret store.
+Before taking subscriptions, route discovery through the included server API
+or a small edge worker. That layer should keep the OpenAlex key private, cache
+candidate pools, enforce quotas, and optionally run budget-controlled AI
+enrichment. Never place a production API key in browser code or commit `.env`
+files; use encrypted deployment secrets.

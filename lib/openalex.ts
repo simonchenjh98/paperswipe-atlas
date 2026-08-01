@@ -15,6 +15,9 @@ export type Paper = {
   citations: number;
   doi?: string;
   url?: string;
+  openAccess?: boolean;
+  publicationDate?: string;
+  type?: string;
 };
 
 type OpenAlexWork = {
@@ -24,6 +27,10 @@ type OpenAlexWork = {
   publication_year?: number;
   cited_by_count?: number;
   relevance_score?: number;
+  publication_date?: string;
+  type?: string;
+  is_retracted?: boolean;
+  open_access?: { is_oa?: boolean };
   authorships?: Array<{ author?: { display_name?: string } }>;
   primary_location?: {
     source?: { display_name?: string } | null;
@@ -34,6 +41,7 @@ type OpenAlexWork = {
     pdf_url?: string | null;
   } | null;
   concepts?: Array<{ display_name?: string; score?: number }>;
+  topics?: Array<{ display_name?: string; score?: number }>;
   abstract_inverted_index?: Record<string, number[]> | null;
 };
 
@@ -67,7 +75,7 @@ export async function searchOpenAlex({
   mode?: "search" | "trending";
   count?: number;
 }) {
-  const safeCount = Math.min(20, Math.max(6, count));
+  const safeCount = Math.min(100, Math.max(6, count));
   const params = new URLSearchParams({ per_page: String(safeCount) });
 
   if (mode === "trending") {
@@ -83,6 +91,7 @@ export async function searchOpenAlex({
   } else {
     if (!query.trim()) throw new Error("请输入研究主题");
     params.set("search", query.trim());
+    params.set("filter", "is_retracted:false,has_abstract:true");
     params.set("sort", "relevance_score:desc");
   }
 
@@ -104,7 +113,7 @@ export async function searchOpenAlex({
       .slice(0, 3)
       .map((item) => item.author?.display_name)
       .filter(Boolean);
-    const tags = (work.concepts || [])
+    const tags = (work.topics || work.concepts || [])
       .filter((concept) => (concept.score || 0) > 0.35)
       .slice(0, 3)
       .map((concept) => concept.display_name)
@@ -154,6 +163,9 @@ export async function searchOpenAlex({
         work.doi ||
         work.id ||
         "",
+      openAccess: Boolean(work.open_access?.is_oa),
+      publicationDate: work.publication_date || "",
+      type: work.type || "article",
     };
   });
 
