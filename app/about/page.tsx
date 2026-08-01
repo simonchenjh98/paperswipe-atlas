@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 const slides = [
   { day: "MON", title: "Generative Agents", meta: "24 min · Priority", color: "violet" },
@@ -35,12 +34,12 @@ export default function AboutPage() {
     <header className="landing-nav"><div className="landing-nav-inner">
       <a className="landing-brand" href="#top"><span>🎉</span><b>PaperSwipe</b></a>
       <nav>{["explore","library","schedule","trending"].map((id)=><a className={active===id?"active":""} key={id} href={`#${id}`}>{id[0].toUpperCase()+id.slice(1)}</a>)}</nav>
-      <Link className="landing-cta small" href="/">立即体验 <span>→</span></Link>
+      <a className="landing-cta small" href="../">立即体验 <span>→</span></a>
     </div></header>
 
     <main id="top">
       <section className="landing-hero">
-        <div className="landing-hero-copy" data-reveal><p className="landing-eyebrow">What if Google Scholar felt like TikTok?</p><h1>别再<span className="strike-word">搜</span>论文了，<br/>开始<span className="gradient-word">刷</span>论文。</h1><p>AI 先认识你，再替你发现论文。像刷短视频一样，几分钟完成过去需要几小时的筛选。</p><div className="landing-actions"><Link className="landing-cta" href="/">开始刷论文 <span>→</span></Link><a href="#explore">看看怎么工作</a></div><div className="landing-stats"><div><b>5s</b><span>判断是否值得读</span></div><div><b>0</b><span>次手动翻译摘要</span></div><div><b>Live</b><span>全球论文实时接入</span></div></div></div>
+        <div className="landing-hero-copy" data-reveal><p className="landing-eyebrow">What if Google Scholar felt like TikTok?</p><h1>别再<span className="strike-word">搜</span>论文了，<br/>开始<span className="gradient-word">刷</span>论文。</h1><p>AI 先认识你，再替你发现论文。像刷短视频一样，几分钟完成过去需要几小时的筛选。</p><div className="landing-actions"><a className="landing-cta" href="../">开始刷论文 <span>→</span></a><a href="#explore">看看怎么工作</a></div><div className="landing-stats"><div><b>5s</b><span>判断是否值得读</span></div><div><b>0</b><span>次手动翻译摘要</span></div><div><b>Live</b><span>全球论文实时接入</span></div></div></div>
         <div className="hero-device-stage" data-reveal><div className="hero-glow"></div><Phone variant="back"/><Phone variant="front"/></div>
       </section>
 
@@ -54,13 +53,13 @@ export default function AboutPage() {
       <Feature id="trending" index="04" title={<>今天，全世界<br/>都在看什么</>} copy="实时聚合近半年人工智能研究的高引用论文，让热点、重要工作与潜在新方向更早出现在你的雷达上。" items={["OpenAlex 实时引用趋势","按领域筛选全局热点","一键收藏进个人论文库"]} reverse><TrendingDemo/></Feature>
 
       <section className="landing-philosophy"><div data-reveal><p className="section-label">我们的理念</p><h2>未来发现论文的方式，<br/>不应该是 <span className="outline-word">Search</span>，<br/>而应该是 <span className="gradient-word">Discover</span>。</h2><p>只需要说清楚自己正在研究什么，剩下的交给 AI。</p></div></section>
-      <section className="landing-final"><div data-reveal><h2>把「找论文」的力气，<br/>还给「<span className="gradient-word">读论文</span>」本身。</h2><b>Swipe Right On Science.</b><Link className="landing-cta" href="/">别再搜论文了，开始刷论文 <span>→</span></Link><p>当前版本已支持实时发现、滑动筛选、阅读计划与趋势追踪。</p></div></section>
+      <section className="landing-final"><div data-reveal><h2>把「找论文」的力气，<br/>还给「<span className="gradient-word">读论文</span>」本身。</h2><b>Swipe Right On Science.</b><a className="landing-cta" href="../">别再搜论文了，开始刷论文 <span>→</span></a><p>当前版本已支持实时发现、滑动筛选、阅读计划与趋势追踪。</p></div></section>
     </main>
-    <footer className="landing-footer">© PaperSwipe Atlas — Discover, not Search. <Link href="/">进入产品</Link></footer>
+    <footer className="landing-footer">© PaperSwipe Atlas — Discover, not Search. <a href="../">进入产品</a></footer>
   </div>;
 }
 
-function Feature({id,index,title,copy,items,reverse=false,children}:{id:string;index:string;title:React.ReactNode;copy:string;items:string[];reverse?:boolean;children:React.ReactNode}) { return <section id={id} className={`landing-feature ${reverse?"reverse":""}`}><div className="feature-copy" data-reveal><p className="section-label">{index} · {id}</p><h2>{title}</h2><p>{copy}</p><ul>{items.map(item=><li key={item}><i>✓</i><span>{item}</span></li>)}</ul><Link href="/">立即体验此功能 <span>→</span></Link></div><div className="feature-art" data-reveal>{children}</div></section> }
+function Feature({id,index,title,copy,items,reverse=false,children}:{id:string;index:string;title:React.ReactNode;copy:string;items:string[];reverse?:boolean;children:React.ReactNode}) { return <section id={id} className={`landing-feature ${reverse?"reverse":""}`}><div className="feature-copy" data-reveal><p className="section-label">{index} · {id}</p><h2>{title}</h2><p>{copy}</p><ul>{items.map(item=><li key={item}><i>✓</i><span>{item}</span></li>)}</ul><a href="../">立即体验此功能 <span>→</span></a></div><div className="feature-art" data-reveal>{children}</div></section> }
 
 function Phone({variant}:{variant:"front"|"back"}) { return <div className={`landing-phone ${variant}`}><div className="phone-top"><span>9:41</span><i></i></div><div className="phone-brand">✦ PaperSwipe</div>{variant==="front"?<><div className="phone-paper"><small>PRIORITY · 97% MATCH</small><h3>Generative Agents</h3><p>用记忆、反思与规划构成可信的生成式智能体行为架构。</p><div><span>#Agent</span><span>#Memory</span></div></div><div className="phone-actions"><b>×</b><b>☆</b><b>→</b></div></>:<><div className="phone-list-title">Your Library</div>{["Priority","Interested","Read"].map((x,i)=><div className="phone-row" key={x}><i></i><p><b>{x}</b><span>{["12 papers","28 papers","41 papers"][i]}</span></p></div>)}</>}</div> }
 function SwipeDemo(){return <div className="demo-stack"><div className="demo-card back"></div><div className="demo-card"><small>优先读 · 93% 相关</small><h3>Self-Reflection in LLM Agents</h3><p>语言反馈驱动的反思能在不更新参数的情况下改进多轮决策。</p><div className="demo-tags"><span>#Reflection</span><span>#Reasoning</span></div><footer><i>×</i><i>☆</i><b>收藏 →</b></footer></div></div>}

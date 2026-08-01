@@ -26,9 +26,10 @@ test("renders the PaperSwipe product shell", async () => {
 });
 
 test("includes complete discovery workflow and live data route", async () => {
-  const [page, route, layout, packageJson] = await Promise.all([
+  const [page, route, openAlex, layout, packageJson] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("app/api/papers/route.ts", root), "utf8"),
+    readFile(new URL("lib/openalex.ts", root), "utf8"),
     readFile(new URL("app/layout.tsx", root), "utf8"),
     readFile(new URL("package.json", root), "utf8"),
   ]);
@@ -36,8 +37,9 @@ test("includes complete discovery workflow and live data route", async () => {
   assert.match(page, /downloadBibTeX/);
   assert.match(page, /function Trending/);
   assert.match(page, /localStorage\.setItem/);
-  assert.match(route, /api\.openalex\.org\/works/);
-  assert.match(route, /abstract_inverted_index/);
+  assert.match(route, /searchOpenAlex/);
+  assert.match(openAlex, /api\.openalex\.org\/works/);
+  assert.match(openAlex, /abstract_inverted_index/);
   assert.match(layout, /PaperSwipe/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 });

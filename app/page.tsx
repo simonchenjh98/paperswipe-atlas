@@ -1,13 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-
-type Paper = {
-  id: number; title: string; zh: string; authors: string; venue: string; year: number;
-  score: number; verdict: "优先读" | "可以读" | "先放着"; minutes: number;
-  tags: string[]; claim: string; why: string; methods: string; citations: number;
-  doi?: string; url?: string;
-};
+import { searchOpenAlex, type Paper } from "../lib/openalex";
 
 const SEED: Paper[] = [
   { id: 1, title: "Generative Agents: Interactive Simulacra of Human Behavior", zh: "生成式智能体：人类行为的交互式模拟", authors: "Park et al.", venue: "UIST", year: 2023, score: 97, verdict: "优先读", minutes: 24, tags: ["Agent", "Memory", "HCI"], claim: "用记忆、反思与规划构成可信的生成式智能体行为架构。", why: "与你关注的长期记忆和智能体行为高度重合，可直接复用其记忆流与反思机制。", methods: "25 个智能体沙盒实验 · 观察性评估", citations: 4210 },
@@ -45,9 +39,7 @@ export default function Home() {
   const discover = async (value: string) => {
     setTopic(value); setShowTopic(false); setLoading(true);
     try {
-      const response = await fetch(`/api/papers?query=${encodeURIComponent(value)}&count=10`);
-      if (!response.ok) throw new Error("search failed");
-      const data = await response.json() as { papers: Paper[] };
+      const data = await searchOpenAlex({ query: value, count: 10 });
       const merged = [...data.papers, ...papers.filter((paper) => !data.papers.some((live) => live.id === paper.id))];
       setPapers(merged); setQueue(data.papers); localStorage.setItem("paperswipe-papers", JSON.stringify(merged));
       setToast(`已从 OpenAlex 找到 ${data.papers.length} 篇实时论文`);
@@ -67,7 +59,7 @@ export default function Home() {
   return <div className="app-shell">
     <aside className="sidebar">
       <button className="brand" onClick={() => setTab("discover")}><span>🎉</span><b>PaperSwipe</b></button>
-      <nav>{tabs.map(([id, icon, label]) => <button key={id} className={tab === id ? "active" : ""} onClick={() => setTab(id)}><i>{icon}</i><span>{label}</span></button>)}<a href="/about" style={{height:48,borderRadius:13,color:"#77756f",display:"flex",alignItems:"center",gap:14,padding:"0 15px",textDecoration:"none",fontSize:13,fontWeight:700}}><i style={{fontStyle:"normal",fontSize:20,width:24,textAlign:"center"}}>◈</i><span>产品介绍</span></a></nav>
+      <nav>{tabs.map(([id, icon, label]) => <button key={id} className={tab === id ? "active" : ""} onClick={() => setTab(id)}><i>{icon}</i><span>{label}</span></button>)}<a href="./about/" style={{height:48,borderRadius:13,color:"#77756f",display:"flex",alignItems:"center",gap:14,padding:"0 15px",textDecoration:"none",fontSize:13,fontWeight:700}}><i style={{fontStyle:"normal",fontSize:20,width:24,textAlign:"center"}}>◈</i><span>产品介绍</span></a></nav>
       <div className="side-foot"><div className="avatar">JC</div><div><b>Researcher</b><small>同步于本机</small></div><button aria-label="设置">•••</button></div>
     </aside>
 
@@ -146,7 +138,7 @@ function Plan({papers,states,onRead}:{papers:Paper[];states:Record<number,string
 
 function Trending({onSave}:{onSave:(paper:Paper)=>void}) {
   const [papers,setPapers]=useState<Paper[]>([]); const [loading,setLoading]=useState(true); const [field,setField]=useState("全部");
-  useEffect(()=>{ let active=true; fetch("/api/papers?mode=trending&count=12").then(r=>r.ok?r.json():Promise.reject()).then((data:{papers:Paper[]})=>{if(active)setPapers(data.papers)}).catch(()=>{if(active)setPapers(SEED.slice().sort((a,b)=>b.citations-a.citations))}).finally(()=>{if(active)setLoading(false)}); return()=>{active=false}},[]);
+  useEffect(()=>{ let active=true; searchOpenAlex({mode:"trending",count:12}).then((data)=>{if(active)setPapers(data.papers)}).catch(()=>{if(active)setPapers(SEED.slice().sort((a,b)=>b.citations-a.citations))}).finally(()=>{if(active)setLoading(false)}); return()=>{active=false}},[]);
   const visible=field==="全部"?papers:papers.filter(p=>`${p.tags}${p.title}`.toLowerCase().includes(field.toLowerCase()));
   return <section className="view list-view"><div className="page-title"><div><p className="eyebrow">GLOBAL TRENDING · LIVE</p><h1>今天，全世界都在看什么</h1><p>基于近 120 天 OpenAlex 引用数据实时生成，不依赖静态榜单。</p></div><span className="live-badge"><i></i> LIVE</span></div><div className="trend-filters">{["全部","AI","Health","Education","Climate"].map(item=><button key={item} className={field===item?"active":""} onClick={()=>setField(item)}>{item}</button>)}</div>{loading?<div className="trend-loading">正在更新全球论文热榜…</div>:<div className="trend-grid">{visible.map((paper,index)=><article key={paper.id}><b className="rank">{String(index+1).padStart(2,"0")}</b><div className="trend-meta"><span>{paper.venue}</span><em>↗ {paper.citations.toLocaleString()} 引用</em></div><h3>{paper.title}</h3><p>{paper.authors} · {paper.year}</p><div className="tags">{paper.tags.slice(0,3).map(tag=><span key={tag}>#{tag}</span>)}</div><footer><button onClick={()=>onSave(paper)}>＋ 收藏</button>{paper.url&&<button onClick={()=>window.open(paper.url,"_blank","noopener,noreferrer")}>阅读原文 ↗</button>}</footer></article>)}</div>}</section>
 }

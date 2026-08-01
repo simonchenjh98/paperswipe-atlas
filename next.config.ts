@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /* Runtime deployment is configured by vinext and the target platform. */
 };
 
 export default nextConfig;
