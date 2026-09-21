@@ -56,8 +56,10 @@ test("renders the complete PaperSwipe product landing page", async () => {
   assert.match(html, /Know what matters/);
   assert.match(html, /Relevance/);
   assert.match(html, /daily frontier/i);
-  assert.match(html, /paperswipe pro/i);
-  assert.match(html, /\$5/);
+  assert.match(html, /open source/i);
+  assert.match(html, /MIT LICENSED/i);
+  assert.match(html, /github\.com\/simonchenjh98\/paperswipe-atlas/);
+  assert.doesNotMatch(html, /paperswipe pro|\$5|free trial/i);
 });
 
 test("ships a bespoke social preview", async () => {
