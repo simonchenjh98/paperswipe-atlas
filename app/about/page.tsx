@@ -10,7 +10,7 @@ export default function AboutPage() {
   }, []);
 
   return <div className="launch-page">
-    <nav className="launch-nav"><a className="launch-logo" href="#top"><LaunchMark/><b>PaperSwipe</b></a><div><a href="#how">How it works</a><a href="#signal">Relevance</a><a href="#pricing">Pricing</a></div><a className="launch-nav-cta" href="../">Open today&apos;s brief <span>↗</span></a></nav>
+    <nav className="launch-nav"><a className="launch-logo" href="#top"><LaunchMark/><b>PaperSwipe</b></a><div><a href="#how">How it works</a><a href="#signal">Relevance</a><a href="#open-source">Open source</a></div><a className="launch-nav-cta" href="../">Open today&apos;s brief <span>↗</span></a></nav>
     <main id="top">
       <section className="launch-hero">
         <div className="hero-noise"></div>
@@ -38,14 +38,14 @@ export default function AboutPage() {
 
       <section className="launch-map" data-launch-reveal><div><p className="launch-label"><i></i> YOUR PERSONAL FRONTIER</p><h2>Watch your attention<br/>become an edge.</h2><p>See the fields gaining momentum, the mature ideas worth trusting, and the adjacent territory you haven&apos;t explored yet.</p><a href="../">Explore your signal map <span>→</span></a></div><MiniMap/></section>
 
-      <section className="launch-pricing" id="pricing">
-        <header data-launch-reveal><p className="launch-label"><i></i> SIMPLE ON PURPOSE</p><h2>One plan. One useful habit.</h2></header>
-        <div className="price-card" data-launch-reveal><div className="price-card-top"><div><span>PAPERSWIPE PRO</span><h3>Your daily knowledge edge.</h3></div><p><b>$5</b><span>/month<br/><small>Founder price</small></span></p></div><div className="price-features"><span>Full 7–10 signal Daily Drop</span><span>Unlimited signal history</span><span>Topic tracking and weekly Frontier Map</span><span>BibTeX and insight exports</span><span>Personal ranking that learns from you</span></div><a href="../">Start free for seven days <span>→</span></a><small>No card during beta. Cancel anytime.</small></div>
+      <section className="launch-pricing" id="open-source">
+        <header data-launch-reveal><p className="launch-label"><i></i> OPEN BY DEFAULT</p><h2>Your research radar.<br/>Your data. Your code.</h2></header>
+        <div className="price-card" data-launch-reveal><div className="price-card-top"><div><span>MIT LICENSED</span><h3>Build the next PaperAtlas with us.</h3></div><p><b>MIT</b><span>licensed<br/><small>self-host friendly</small></span></p></div><div className="price-features"><span>Full seven-signal Daily Drop</span><span>Local interest profile and history</span><span>Frontier Map and BibTeX export</span><span>Public roadmap and issue tracker</span><span>Local PDF atlas planned next</span></div><a href="https://github.com/simonchenjh98/paperswipe-atlas">View source on GitHub <span>→</span></a><small>No account or payment required for the public beta.</small></div>
       </section>
 
       <section className="launch-final"><div data-launch-reveal><LaunchMark/><p>THE FRONTIER WON&apos;T WAIT</p><h2>Read less.<br/><em>Know more.</em></h2><a href="../">Open today&apos;s brief <span>→</span></a></div></section>
     </main>
-    <footer className="launch-footer"><a className="launch-logo" href="#top"><LaunchMark/><b>PaperSwipe</b></a><p>The 10-minute daily briefing for people building the future.</p><div><a href="../">Product</a><a href="#pricing">Pricing</a><a href="https://github.com/simonchenjh98/paperswipe-atlas">GitHub ↗</a></div><small>© 2026 PaperSwipe. Built at the edge of what&apos;s next.</small></footer>
+    <footer className="launch-footer"><a className="launch-logo" href="#top"><LaunchMark/><b>PaperSwipe</b></a><p>The 10-minute daily briefing for people building the future.</p><div><a href="../">Product</a><a href="#open-source">Open source</a><a href="https://github.com/simonchenjh98/paperswipe-atlas">GitHub ↗</a></div><small>© 2026 PaperSwipe. Open source under the MIT license.</small></footer>
   </div>;
 }
 

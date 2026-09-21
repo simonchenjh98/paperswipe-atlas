@@ -40,7 +40,7 @@ export default function Home() {
   const [states, setStates] = useState<Record<number, ActionKind>>({});
   const [loading, setLoading] = useState(false);
   const [showTune, setShowTune] = useState(false);
-  const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showOpenSource, setShowOpenSource] = useState(false);
   const [toast, setToast] = useState("");
   const [skipPrompt, setSkipPrompt] = useState<Paper | null>(null);
   const completed = Math.max(0, papers.slice(0, 7).filter((paper) => states[paper.id]).length);
@@ -108,15 +108,15 @@ export default function Home() {
       <nav>{NAV.map(([id, icon, label]) => <button key={id} className={tab === id ? "active" : ""} onClick={() => setTab(id)}><i>{icon}</i><span>{label}</span>{id === "today" && <b>{queue.length}</b>}</button>)}</nav>
       <div className="side-signal"><SignalOrb progress={completed / 7}/><div><span>Daily signal</span><b>{completed}/7 complete</b></div></div>
       <button className="tune-button" onClick={() => setShowTune(true)}><span>⌁</span><div><b>Tune your signal</b><small>{profile.topics.length} interests active</small></div><i>›</i></button>
-      <a className="about-link" href="./about/">About & pricing <span>↗</span></a>
-      <button className="upgrade-side" onClick={() => setShowUpgrade(true)}><small>FOUNDER PLAN</small><b>Go deeper for $5</b><span>Unlock the full daily drop →</span></button>
+      <a className="about-link" href="./about/">About & roadmap <span>↗</span></a>
+      <button className="upgrade-side" onClick={() => setShowOpenSource(true)}><small>OPEN SOURCE</small><b>Build it with us</b><span>View the code and roadmap →</span></button>
     </aside>
 
     <main className="frontier-main">
       <header className="frontier-topbar">
         <div className="mobile-brand"><Mark/><b>PaperSwipe</b></div>
         <div className="brief-context"><span>YOUR BRIEF</span><button onClick={() => setShowTune(true)}>{topic} <i>⌄</i></button></div>
-        <div className="topbar-actions"><span className="streak">● <b>12</b> day streak</span><button className="pro-pill" onClick={() => setShowUpgrade(true)}>Get Pro</button><button className="avatar-button" aria-label="Account">SC</button></div>
+        <div className="topbar-actions"><span className="streak">● <b>12</b> day streak</span><button className="pro-pill" onClick={() => setShowOpenSource(true)}>Open source</button><button className="avatar-button" aria-label="Local profile">SC</button></div>
       </header>
 
       {tab === "today" && <TodayView queue={queue} all={papers} states={states} loading={loading} onAct={act} onRefresh={() => refresh(topic)} completed={completed}/>}
@@ -126,7 +126,7 @@ export default function Home() {
 
     <nav className="frontier-mobile-nav">{NAV.map(([id, icon, label]) => <button key={id} className={tab === id ? "active" : ""} onClick={() => setTab(id)}><i>{icon}</i><span>{label}</span></button>)}</nav>
     {showTune && <TuneModal topic={topic} profile={profile} onClose={() => setShowTune(false)} onSave={(value, topics) => { const next = { ...profile, topics }; setProfile(next); localStorage.setItem("paperswipe-profile-v2", JSON.stringify(next)); refresh(value, next); }}/>}
-    {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)}/>}
+    {showOpenSource && <OpenSourceModal onClose={() => setShowOpenSource(false)}/>}
     {skipPrompt && <SkipFeedback onChoose={explainSkip} onClose={() => setSkipPrompt(null)}/>}
     {toast && <div className="frontier-toast"><span>✓</span>{toast}</div>}
   </div>;
@@ -235,7 +235,7 @@ function TuneModal({ topic, profile, onClose, onSave }: { topic: string; profile
   return <div className="frontier-modal-backdrop" onMouseDown={onClose}><form className="tune-modal" onMouseDown={(event) => event.stopPropagation()} onSubmit={(event) => { event.preventDefault(); if (value.trim()) onSave(value.trim(), topics); }}><button className="modal-close" type="button" onClick={onClose}>×</button><p className="frontier-kicker"><i></i> TUNE YOUR SIGNAL</p><h2>What are you building toward?</h2><p>Specific intent beats broad keywords. We&apos;ll use this to re-rank a wider candidate set.</p><textarea value={value} onChange={(event) => setValue(event.target.value)} autoFocus/><span className="input-label">CHOOSE UP TO FIVE INTERESTS</span><div className="topic-options">{options.map((item) => <button type="button" className={topics.includes(item) ? "active" : ""} key={item} onClick={() => toggle(item)}>{topics.includes(item) ? "✓ " : "+ "}{item}</button>)}</div><button className="modal-primary" type="submit">Build my daily brief <span>→</span></button></form></div>;
 }
 
-function UpgradeModal({ onClose }: { onClose: () => void }) { return <div className="frontier-modal-backdrop" onMouseDown={onClose}><div className="upgrade-modal" onMouseDown={(event) => event.stopPropagation()}><button className="modal-close" onClick={onClose}>×</button><div className="pricing-orb"><SignalOrb progress={0.78}/></div><p className="frontier-kicker"><i></i> PAPERSWIPE PRO</p><h2>Stay ahead for less<br/>than a coffee.</h2><p>Turn the daily habit into a compounding knowledge edge.</p><div className="price"><b>$5</b><span>/ month<br/><small>Cancel anytime</small></span></div><ul><li>✓ Full 7–10 signal Daily Drop</li><li>✓ Unlimited history and topic tracking</li><li>✓ Weekly Frontier Map report</li><li>✓ Exports and priority ranking</li></ul><button className="modal-primary" onClick={() => window.alert("Secure checkout will be connected before launch.")}>Start 7-day free trial <span>→</span></button><small>No card during beta · Founder price locked for life</small></div></div>; }
+function OpenSourceModal({ onClose }: { onClose: () => void }) { return <div className="frontier-modal-backdrop" onMouseDown={onClose}><div className="upgrade-modal" onMouseDown={(event) => event.stopPropagation()}><button className="modal-close" onClick={onClose}>×</button><div className="pricing-orb"><SignalOrb progress={0.78}/></div><p className="frontier-kicker"><i></i> OPEN SOURCE BETA</p><h2>Own your research radar.<br/>Help shape the atlas.</h2><p>The complete public beta is available under the MIT license.</p><div className="price"><b>MIT</b><span>licensed<br/><small>self-host friendly</small></span></div><ul><li>✓ Full seven-signal Daily Drop</li><li>✓ Local interest profile and history</li><li>✓ Frontier Map and BibTeX export</li><li>✓ Public roadmap and contributor workflow</li></ul><button className="modal-primary" onClick={() => window.open("https://github.com/simonchenjh98/paperswipe-atlas", "_blank", "noopener,noreferrer")}>View source on GitHub <span>→</span></button><small>No account required for the public demo</small></div></div>; }
 
 function SkipFeedback({ onChoose, onClose }: { onChoose: (reason: string) => void; onClose: () => void }) { return <div className="skip-feedback"><span>Why wasn&apos;t it useful?</span>{["Too theoretical", "Wrong topic", "Already know this", "Low trust"].map((reason) => <button key={reason} onClick={() => onChoose(reason)}>{reason}</button>)}<button className="skip-close" onClick={onClose}>×</button></div>; }
 
